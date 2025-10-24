@@ -27,7 +27,7 @@ struct RootView: View {
                     Image(systemName: "gearshape")
                     Text("설정")
                 }
-        }
+        }.accentColor(.white)
     }
 }
 
