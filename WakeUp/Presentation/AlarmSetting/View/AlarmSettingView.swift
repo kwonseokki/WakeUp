@@ -14,20 +14,6 @@ struct AlarmSettingView: View {
     var body: some View {
         NavigationStack(path: $viewModel.path) {
             VStack(spacing: 0) {
-                HStack {
-                    Spacer()
-                    Text("알람 설정")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .bold))
-                    }
-                }
-                .frame(height: 56)
-                .padding(.horizontal, 16)
-                
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         
@@ -54,19 +40,24 @@ struct AlarmSettingView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("반복")
                                 .font(.system(size: 16, weight: .bold))
-                            HStack(alignment: .center, spacing: 10) {
-                                ForEach(Weekday.allCases, id: \.self) { day in
-                                    Text(day.dayName)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .frame(width: 36, height: 36)
-                                        .background(viewModel.weekDays.contains(day) ? .blue : Color.white.opacity(0.15))
-                                        .cornerRadius(18)
-                                        .onTapGesture {
-                                            viewModel.selecteDay(day)
-                                        }
+                            
+                            GeometryReader { geometry in
+                                let itemSize = (geometry.size.width - 10 * 6) / 7
+                                HStack(alignment: .center, spacing: 10) {
+                                    ForEach(Weekday.allCases, id: \.self) { day in
+                                        Text(day.dayName)
+                                            .font(.system(size: 14, weight: .medium))
+                                            .frame(width: itemSize, height: itemSize)
+                                            .background(viewModel.weekDays.contains(day) ? Color.blue.opacity(0.15) : Color.white.opacity(0.15))
+                                            .cornerRadius(12)
+                                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(viewModel.weekDays.contains(day) ? .blue : Color.white.opacity(0.15), lineWidth: 2))
+                                            .onTapGesture {
+                                                viewModel.selecteDay(day)
+                                            }
+                                    }
                                 }
                             }
-                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
                         }
                         
                         VStack(spacing: 12) {
@@ -81,6 +72,9 @@ struct AlarmSettingView: View {
                     .padding(20)
                 }
             }
+            .navigationBarItems(trailing: closeButton)
+            .navigationTitle("알람 설정")
+            .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottom, content: {
                 MainButton(title: "설정 완료") {
                     if viewModel.alarm == nil {
@@ -103,6 +97,14 @@ struct AlarmSettingView: View {
             }
         }
     }
+    
+    private var closeButton: some View {
+        Button(action: { dismiss() }) {
+            Image(systemName: "xmark")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(.white)
+        }
+    }
 }
 
 struct SettingOption: View {
@@ -116,6 +118,7 @@ struct SettingOption: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(.white)
                     Text(subtitle)
                         .font(.system(size: 14))
                         .foregroundStyle(.gray)
