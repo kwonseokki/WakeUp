@@ -12,6 +12,7 @@ struct RootView: View {
     init() {
         UITabBar.appearance().backgroundColor = .tabbar
     }
+    
     var body: some View {
         TabView {
             NavigationStack {
