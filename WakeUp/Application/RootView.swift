@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct RootView: View {
+    @State var isOnboarding = false
     
     var body: some View {
-        NavigationStack {
-            MainView()
-                .environmentObject(MainViewModel())
+        ZStack {
+            Color.customBackground.ignoresSafeArea(.all)
+            
+            if isOnboarding {
+                MainView()
+                    .environmentObject(MainViewModel())
+            } else {
+                OnboardingView()
+            }
         }
     }
 }
