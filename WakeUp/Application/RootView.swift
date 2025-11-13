@@ -9,25 +9,11 @@ import SwiftUI
 
 struct RootView: View {
     
-    init() {
-        UITabBar.appearance().backgroundColor = .tabBar
-    }
     var body: some View {
-        TabView {
-            NavigationStack {
-                MainView()
-                    .environmentObject(MainViewModel())
-            }
-            .tabItem {
-                Image(systemName: "deskclock")
-                Text("알람")
-            }
-            SettingView()
-                .tabItem {
-                    Image(systemName: "gearshape")
-                    Text("설정")
-                }
-        }.accentColor(.white)
+        NavigationStack {
+            MainView()
+                .environmentObject(MainViewModel())
+        }
     }
 }
 
