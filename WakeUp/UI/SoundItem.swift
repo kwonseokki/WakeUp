@@ -13,7 +13,7 @@ struct SoundItem: View {
     
     var body: some View {
         HStack {
-            Image(isChecked ? .checked : .notChecked)
+            
             Text("제목제목제목제목")
             Spacer()
         }

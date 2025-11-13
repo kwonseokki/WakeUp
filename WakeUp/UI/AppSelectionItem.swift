@@ -19,7 +19,7 @@ struct AppSelectionItem: View {
                 .background(.buttonDisasbled)
                 .cornerRadius(16)
             
-            Text("카카오톡")
+            Text(appName)
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.neutral)
             Spacer()
