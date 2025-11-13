@@ -16,6 +16,7 @@ enum OnboardingPath: Hashable {
 class OnboardingViewModel: ObservableObject {
     @Published var navigationPath: [OnboardingPath] = []
     @Published var isRequestingPermission = false
+    @Published var isOnboarding = UserDefaults.standard.bool(forKey: "isOnboarding")
     
     func navigate(to path: OnboardingPath) {
         navigationPath.append(path)

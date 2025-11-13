@@ -39,7 +39,7 @@ struct OnboardingView: View {
                 case .screenTimePermission:
                     ScreenTimePermissionView()
                 case .appRecommendation:
-                    Text("App Recommendation")
+                    AppRecommendationView()
                 }
             }
         }
