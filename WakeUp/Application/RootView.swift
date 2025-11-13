@@ -7,13 +7,15 @@
 
 import SwiftUI
 
+struct UserDefaultKey {
+    static let isOnboarding = "isOnboarding"
+}
+
 struct RootView: View {
-    @State var isOnboarding = false
+    @AppStorage(UserDefaultKey.isOnboarding) private var isOnboarding = UserDefaults.standard.bool(forKey: UserDefaultKey.isOnboarding)
     
     var body: some View {
-        ZStack {
-            Color.customBackground.ignoresSafeArea(.all)
-            
+        Group {
             if isOnboarding {
                 MainView()
                     .environmentObject(MainViewModel())
