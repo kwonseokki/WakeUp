@@ -15,42 +15,30 @@ struct AlarmSettingView: View {
         NavigationStack(path: $viewModel.path) {
             VStack(spacing: 0) {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        
-                        // 알람 이름
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("알람 이름")
-                                .font(.system(size: 16, weight: .bold))
-                            TextField("알람 이름을 입력해주세요", text: $viewModel.title)
-                                .padding(12)
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(10)
-                        }
-                        
+                    VStack(alignment: .leading, spacing: 1) {
                         // 시간 설정
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("시간 설정")
-                                .font(.system(size: 16, weight: .bold))
-                            DatePicker("", selection: $viewModel.time, displayedComponents: .hourAndMinute)
-                                .datePickerStyle(.wheel)
-                                .labelsHidden()
-                        }
+                        DatePicker("", selection: $viewModel.time, displayedComponents: .hourAndMinute)
+                            .datePickerStyle(.wheel)
+                            .labelsHidden()
                         
                         // 요일 설정
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 14) {
                             Text("반복")
-                                .font(.system(size: 16, weight: .bold))
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.neutral)
                             
                             GeometryReader { geometry in
                                 let itemSize = (geometry.size.width - 10 * 6) / 7
                                 HStack(alignment: .center, spacing: 10) {
                                     ForEach(Weekday.allCases, id: \.self) { day in
+                                        let daySelected = viewModel.weekDays.contains(day)
                                         Text(day.dayName)
-                                            .font(.system(size: 14, weight: .medium))
+                                            .font(.system(size: 16, weight: .semibold))
                                             .frame(width: itemSize, height: itemSize)
-                                            .background(viewModel.weekDays.contains(day) ? Color.blue.opacity(0.15) : Color.white.opacity(0.15))
-                                            .cornerRadius(12)
-                                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(viewModel.weekDays.contains(day) ? .blue : Color.white.opacity(0.15), lineWidth: 2))
+                                            .background(daySelected ? .neutralHover : .clear)
+                                            .foregroundStyle(daySelected ? .white : .defaultSecondary)
+                                            .clipShape(Circle())
+                                            .overlay(RoundedRectangle(cornerRadius: itemSize / 2).stroke(daySelected ? .clear : .neutralSecondary, lineWidth: 1))
                                             .onTapGesture {
                                                 viewModel.selecteDay(day)
                                             }
@@ -59,24 +47,28 @@ struct AlarmSettingView: View {
                             }
                             .frame(height: 50)
                         }
-                        
-                        VStack(spacing: 12) {
-                            SettingOption(title: "사운드", subtitle: "Bluebird") {
-                                viewModel.goToSoundView()
-                            }
-                            SettingOption(title: "미션 선택", subtitle: "없음") {
-                                viewModel.goToMissionView()
-                            }
+                        .padding(16)
+                        .background(.default)
+                        .cornerRadius(16)
+                        HStack {
+                            Text("다시 알림")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.neutral)
+                            
+                            Toggle("Repeat Alarm", isOn: .constant(false))
                         }
+                        .padding(16)
+                        .background(.default)
+                        .cornerRadius(16)
                     }
-                    .padding(20)
+                    .padding(16)
                 }
             }
-            .navigationBarItems(trailing: closeButton)
+            .navigationBarItems(leading: backButton)
             .navigationTitle("알람 설정")
             .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottom, content: {
-                MainButton(title: "설정 완료") {
+                MainButton(title: "저장 하기") {
                     if viewModel.alarm == nil {
                         viewModel.saveAlarm()
                     } else {
@@ -84,7 +76,7 @@ struct AlarmSettingView: View {
                     }
                     dismiss()
                 }
-                .padding(.horizontal, 16)                
+                .padding(.horizontal, 16)
             })
             .background(.customBackground)
             .navigationDestination(for: AlarmSettingPath.self) { path in
@@ -98,9 +90,9 @@ struct AlarmSettingView: View {
         }
     }
     
-    private var closeButton: some View {
+    private var backButton: some View {
         Button(action: { dismiss() }) {
-            Image(systemName: "xmark")
+            Image(.backbutton)
                 .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(.white)
         }
