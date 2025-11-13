@@ -17,13 +17,13 @@ struct MainButton: View {
             action?()
         } label: {
             Text(title)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, minHeight: 55)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.brand)
+                .frame(maxWidth: .infinity, minHeight: 62)
         }
         .disabled(disabled)
-        .background(disabled ? .gray : .button)
-        .cornerRadius(12)
+        .background(disabled ? .buttonDisasbled : .button)
+        .cornerRadius(16)
     }
 }
 
