@@ -79,14 +79,6 @@ struct AlarmSettingView: View {
                 .padding(.horizontal, 16)
             })
             .background(.customBackground)
-            .navigationDestination(for: AlarmSettingPath.self) { path in
-                switch path {
-                case .sound:
-                    SoundView()
-                case .mission:
-                    MissionSelecteView()
-                }
-            }
         }
     }
     
