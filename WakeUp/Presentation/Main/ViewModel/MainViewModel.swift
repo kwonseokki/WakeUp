@@ -23,6 +23,7 @@ class MainViewModel: ObservableObject {
     @Published var deleteMode = false
     
     private let dataManager: CoreDataManager
+    private let alarmManager = AlarmManager.shared
     
     // 다음 알람 시간표시
     var nextAlarm: String {

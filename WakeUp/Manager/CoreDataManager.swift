@@ -26,7 +26,7 @@ class CoreDataManager {
     
     lazy var context = persistentContainer.viewContext
     
-    func addAlarm(alarm: AlarmEntity) async {
+    func addAlarm(alarm: AlarmEntity) async throws {
         let newAlarm = Alarm(context: context)
         newAlarm.id = alarm.id
         newAlarm.isActive = true
@@ -37,7 +37,7 @@ class CoreDataManager {
             try context.save()
             print("데이터 추가 성공")
         } catch {
-            print("Core Data save error: \(error)")
+            throw error
         }
     }
     
@@ -66,7 +66,7 @@ class CoreDataManager {
                 if var updateAlarm = data.first {
                     updateAlarm.isActive = alarm.isActive
                     updateAlarm.time = alarm.time
-                    updateAlarm.repeatDay = alarm.repeatDay.map(\.rawValue)                    
+                    updateAlarm.repeatDay = alarm.repeatDay.map(\.rawValue)
                     try context.save()
                 }
             } catch {

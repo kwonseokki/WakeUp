@@ -25,6 +25,5 @@ extension Alarm {
 
 }
 
-extension Alarm : Identifiable {
-
+extension Alarm : Identifiable {    
 }
