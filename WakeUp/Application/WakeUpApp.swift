@@ -52,11 +52,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        if response.notification.request.content.userInfo["type"] as? String == "mission" {
-            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
-        } else {
-            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
-        }
+        
+//        if response.notification.request.content.userInfo["type"] as? String == "mission" {
+//            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
+//        } else {
+//            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
+//        }
     }
 }
 
