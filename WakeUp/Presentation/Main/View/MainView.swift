@@ -12,6 +12,7 @@ struct MainView: View {
     
     var body: some View {
         ScrollView {
+            // TODO: 이거 띄울건지 물어보기
             if viewModel.isActiveAlarm {
                 Text("⏰ \(viewModel.nextAlarm) 뒤 알람")
                     .font(.headline)
@@ -38,7 +39,7 @@ struct MainView: View {
                         AlarmView(alarm: Binding(get: {
                             // 삭제시 인덱스 오류 방지
                             if index > viewModel.alarmList.count-1 {
-                                return AlarmEntity(id: "", title: "", time: .now, notiRequests: [], isActive: false, repeatDay: [])
+                                return AlarmEntity(id: "", time: .now, isActive: false, repeatDay: [])
                             } else {
                                 return alarmEntity
                             }

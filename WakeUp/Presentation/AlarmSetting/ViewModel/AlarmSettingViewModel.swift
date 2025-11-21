@@ -16,17 +16,15 @@ enum AlarmSettingPath: Hashable {
 final class AlarmSettingViewModel: ObservableObject {
     @Published var path: [AlarmSettingPath] = []
     @Published var weekDays: Set<Weekday> = []
-    @Published var title = ""
     @Published var time = Date()
     
     var alarm: AlarmEntity?
+        
+    private let alarmManager: AlarmManager
     
-    private let dataManager: CoreDataManager
-    
-    init(alarm: AlarmEntity? = nil, dataManager: CoreDataManager = CoreDataManager.shared) {
-        self.dataManager = dataManager
+    init(alarm: AlarmEntity? = nil, alarmManager: AlarmManager = AlarmManager.shared) {
+        self.alarmManager = alarmManager
         self.alarm = alarm
-        self.title = alarm?.title ?? ""
         self.time = alarm?.time ?? Date()
         self.weekDays = Set(alarm?.repeatDay ?? [])
     }
@@ -49,13 +47,12 @@ final class AlarmSettingViewModel: ObservableObject {
     
     func saveAlarm() {
         let content = UNMutableNotificationContent()
-        content.title = title
         content.body = "test"
         content.sound = UNNotificationSound(named: UNNotificationSoundName("sampleSound.caf"))
         
         let hour = Calendar.current.component(.hour, from: time)
         let minute = Calendar.current.component(.minute, from: time)
-        let center = UNUserNotificationCenter.current()
+//        let center = UNUserNotificationCenter.current()
         
         let alarmGroupId = UUID().uuidString
         var requests = Set<UNNotificationRequest>()
@@ -71,25 +68,23 @@ final class AlarmSettingViewModel: ObservableObject {
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
             
             requests.insert(request)
-            center.add(request) { error in}
         }
         
         let alarmEntity = AlarmEntity(
             id: alarmGroupId,
-            title: title,
             time: time,
-            notiRequests: Array(requests) as! [UNNotificationRequest],
             isActive: true,
             repeatDay: Array(weekDays)
         )
         
-        dataManager.addAlarm(alarm: alarmEntity)
+        Task {
+            await alarmManager.addAlarm(alarmEntity)
+        }
     }
     
     func updateAlarm() {
         if let alarm {
             var updateAlarm = alarm
-            updateAlarm.title = title
             updateAlarm.time = time
             
             // 날짜를 수정한경우
@@ -106,7 +101,7 @@ final class AlarmSettingViewModel: ObservableObject {
             let hour = Calendar.current.component(.hour, from: time)
             let minute = Calendar.current.component(.minute, from: time)
             let content = UNMutableNotificationContent()
-            content.title = title
+            
             content.body = "test"
             content.sound = UNNotificationSound(named: UNNotificationSoundName("sampleSound.caf"))
                         
@@ -127,13 +122,12 @@ final class AlarmSettingViewModel: ObservableObject {
             }
             
             updateAlarm.repeatDay = Array(addWeekDay)
-            updateAlarm.notiRequests = Array(requests)
             
-            do {
-                try dataManager.updateAlarm(alarm: updateAlarm)
-            } catch {
-                
-            }
+//            do {
+//                try dataManager.updateAlarm(alarm: updateAlarm)
+//            } catch {
+//                
+//            }
         }
     }
 }
