@@ -11,9 +11,7 @@ import SwiftUI
 
 struct AlarmEntity: Hashable, Identifiable {
     let id: String
-    var title: String
     var time: Date
-    var notiRequests: [UNNotificationRequest]
     var isActive: Bool
     var repeatDay: [Weekday]
     
