@@ -68,11 +68,13 @@ struct AlarmSettingView: View {
             .navigationTitle("알람 설정")
             .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottom, content: {
-                MainButton(title: "저장 하기") {
-                    if viewModel.alarm == nil {
-                        viewModel.saveAlarm()
-                    } else {
+                let isEditing = viewModel.alarm != nil
+                
+                MainButton(title: isEditing ? "수정 하기" : "저장 하기") {
+                    if isEditing {
                         viewModel.updateAlarm()
+                    } else {
+                        viewModel.saveAlarm()
                     }
                     dismiss()
                 }

@@ -48,6 +48,7 @@ class MainViewModel: ObservableObject {
     }
     
     func requestPermission() async {
+        // TODO: 권한 관련도 한곳에서 관리하기
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
         
@@ -65,16 +66,13 @@ class MainViewModel: ObservableObject {
     
     //     데이터를 가져왔을떄 -> isActive 상태에 따라서 초기값 바인딩
     func fetchAlarm() async {
-        let center = UNUserNotificationCenter.current()
-        let requests = await center.pendingNotificationRequests()
-        
+        // TODO: 한곳에서 미리 데이터를 정렬하는게 좋을듯
         let result = dataManager.fetchAlarm()
+        
         alarmList = result.map { alarm in
             return AlarmEntity(
                 id: alarm.id,
-                title: alarm.title ?? "",
                 time: alarm.time,
-                notiRequests: requests.filter { alarm.requestIDs.contains($0.identifier) },
                 isActive: alarm.isActive,
                 repeatDay: alarm.repeatDay.compactMap { Weekday(rawValue: $0) }
             )
@@ -82,14 +80,6 @@ class MainViewModel: ObservableObject {
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {
-        let center = UNUserNotificationCenter.current()
-        //      alarm의 하위 목록 알람 트리거
-        if alarm.isActive {
-            alarm.notiRequests.forEach { center.add($0) }
-        } else {
-            center.removePendingNotificationRequests(withIdentifiers: alarm.notiRequests.map{$0.identifier})
-        }
-        
         do {
             try dataManager.updateAlarm(alarm: alarm)
         } catch {
@@ -98,10 +88,6 @@ class MainViewModel: ObservableObject {
     }
     
     func deleteAlarm(_ alarm: AlarmEntity) {
-        let center = UNUserNotificationCenter.current()
-        
-        // 기존 하위알람 삭제
-        center.removePendingNotificationRequests(withIdentifiers: alarm.notiRequests.map(\.identifier))
         
         dataManager.deleteAlarm(alarm: alarm)
         Task {

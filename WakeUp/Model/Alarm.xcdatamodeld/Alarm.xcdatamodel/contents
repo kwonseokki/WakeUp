@@ -4,8 +4,6 @@
         <attribute name="id" attributeType="String"/>
         <attribute name="isActive" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="repeatDay" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
-        <attribute name="requestIDs" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
 </model>
